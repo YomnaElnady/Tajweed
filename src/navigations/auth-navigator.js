@@ -10,7 +10,7 @@ const AuthNavigatorConfig = {
 };
 
 const RouteConfigs = {
-  Welcome:Welcome,
+  Welcome: Welcome,
   // Login:LoginScreen,
 };
 
