@@ -1,6 +1,6 @@
 import React ,{Component}from 'react';
 import {View,Text,  FlatList,
-Image} from 'react-native';
+Image,Alert} from 'react-native';
 
 class Home extends Component{
   constructor()
@@ -8,8 +8,8 @@ class Home extends Component{
     super();
     this.state={
       FlatListItems:[
-      {key: 'مثال1 ',category:''},
-      {key: 'مثال2 ',ImageUri:"https://i.ytimg.com/vi/3Y1J6zWSEtU/hqdefault.jpg",category:''},
+      {key: '1مثال ',category:''},
+      {key: '2مثال ',ImageUri:"https://i.ytimg.com/vi/3Y1J6zWSEtU/hqdefault.jpg",category:''},
       {key: 'مثال3 ',ImageUri:"https://media.mnn.com/assets/images/2018/08/grilled_salmon.jpg.653x0_q80_crop-smart.jpg",category:''},
       {key: 'مثال4',ImageUri:"https://media-cdn.tripadvisor.com/media/photo-s/0d/1e/10/55/harvest-kale-grilled.jpg",category:''},
       {key: 'مثال5',ImageUri:"https://assets.epicurious.com/photos/57bb35cdb6069b112362e097/2:1/w_1260%2Ch_630/pan-grilled-steak.jpg",category:' '}
@@ -18,7 +18,8 @@ class Home extends Component{
     }
   }
   GetItem (item) {
-   
+    this.props.navigation.navigate('Methal');
+
     Alert.alert(item);
    
     }

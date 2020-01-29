@@ -4,6 +4,8 @@ import React, {Component} from 'react';
 
 import Home from '_scenes/home';
 import About from '_scenes/about';
+import Hokm from '_scenes/Hokm';
+import Methal from '_scenes/Methal';
 import {
   StyleSheet,
   Text,
@@ -91,9 +93,34 @@ const LoginStack = createStackNavigator({
     }),
   },
 });
-
+const HokmStack = createStackNavigator({
+  Hokm: {
+    screen: Hokm,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerLeft: <NavigationDrawerStructure navigation={navigation} />,
+      headerStyle: {
+        backgroundColor: 'none',
+      },
+      headerTintColor: '#ffffff',
+    }),
+  },
+});
+const MethalStack = createStackNavigator({
+  Methal: {
+    screen: Methal,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerLeft: <NavigationDrawerStructure navigation={navigation} />,
+      headerStyle: {
+        backgroundColor: 'none',
+      },
+      headerTintColor: '#ffffff',
+    }),
+  },
+});
 const AppNavigator = createDrawerNavigator(
-  {Home: HomeStack, About: AboutStack, Login: LoginStack},
+  {Home: HomeStack, About: AboutStack, Login: LoginStack, Hokm:HokmStack, Methal:MethalStack},
   DrawerNavigatorConfig,
 );
 

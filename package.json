@@ -15,6 +15,8 @@
     "eslint-plugin-import": "^2.18.2",
     "react": "16.8.6",
     "react-native": "0.60.5",
+    "react-native-audio": "^4.3.0",
+    "react-native-audio-record": "^0.2.2",
     "react-native-dynamic-vector-icons": "^0.2.1",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.4.1",
