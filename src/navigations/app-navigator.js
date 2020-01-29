@@ -1,9 +1,9 @@
-import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import React, {Component} from 'react';
-
+//import PlayerScreen from 'react-native-sound-playerview';
 import Home from '_scenes/home';
 import About from '_scenes/about';
+import Validate from '_scenes/validate';
 import {
   StyleSheet,
   Text,
@@ -81,14 +81,11 @@ const AboutStack = createStackNavigator({
 const LoginStack = createStackNavigator({
   Login: {
     screen: Login,
-    navigationOptions: ({navigation}) => ({
-      title: '',
-      headerLeft: <NavigationDrawerStructure navigation={navigation} />,
-      headerStyle: {
-        backgroundColor: 'none',
-      },
-      headerTintColor: '#ffffff',
-    }),
+    headerMode: 'none',
+    header: null,
+  },
+  Audio: {
+    screen: Validate,
   },
 });
 

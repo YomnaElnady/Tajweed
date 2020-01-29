@@ -23,7 +23,7 @@ class Welcome extends Component {
     return (
       <SafeAreaView>
         <ImageBackground
-          source={require('../../assets/images/islamic.jpg')}
+          source={require('_assets/images/islamic.jpg')}
           style={{
             width: '100%',
             height: '100%',

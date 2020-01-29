@@ -13,7 +13,7 @@ class LoginScreen extends Component {
 
     return (
       <ImageBackground
-        source={require('../../assets/images/islamic.jpg')}
+        source={require('_assets/images/islamic.jpg')}
         style={{
           width: '100%',
           height: '100%',
@@ -52,7 +52,19 @@ class LoginScreen extends Component {
             placeholder="Password"
             value={this.state.pass}
           />
-          <Button onPress={onConfirm} title="Login" color="#B2DFDB" />
+          <View
+            style={{
+              marginBottom: 20,
+              marginTop: 10,
+              marginLeft: 10,
+              marginRight: 10,
+            }}>
+            <Button
+              onPress={() => this.props.navigation.navigate('Audio')}
+              title="Login"
+              color="#B2DFDB"
+            />
+          </View>
         </View>
       </ImageBackground>
     );
