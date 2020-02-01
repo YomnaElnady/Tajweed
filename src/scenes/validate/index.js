@@ -27,21 +27,21 @@ class Validate extends Component {
             flex: 0.25,
             flexDirection: 'column',
             justifyContent: 'space-between',
-            marginBottom: 20,
+            marginBottom: 10,
             marginTop: 10,
             marginLeft: 10,
             marginRight: 10,
           }}>
           <Button
             onPress={this.trueRecord}
-            title="True"
+            title=" True"
             backgroundColor="#B2DFDB"
             icon={<Icon name="check" color="white" />}
           />
 
           <Button
             onPress={this.falseRecord}
-            title="False"
+            title=" False"
             color="#B2DFDB"
             icon={<Icon name="times" color="white" />}
           />
