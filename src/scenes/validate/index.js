@@ -34,14 +34,14 @@ class Validate extends Component {
           }}>
           <Button
             onPress={this.trueRecord}
-            title=" True"
+            title=" صح"
             backgroundColor="#B2DFDB"
             icon={<Icon name="check" color="white" />}
           />
 
           <Button
             onPress={this.falseRecord}
-            title=" False"
+            title=" خطأ"
             color="#B2DFDB"
             icon={<Icon name="times" color="white" />}
           />

@@ -44,7 +44,7 @@ class LoginScreen extends Component {
               borderRadius: 50,
             }}
             on
-            placeholder="Username"
+            placeholder="اسم المستخدم"
             onChangeText={name => this.setState({name})}
             value={this.state.name}
           />
@@ -59,7 +59,7 @@ class LoginScreen extends Component {
               marginBottom: 20,
               borderRadius: 50,
             }}
-            placeholder="Password"
+            placeholder="كلمة المرور"
             value={this.state.pass}
           />
           <View
@@ -69,7 +69,11 @@ class LoginScreen extends Component {
               marginLeft: 10,
               marginRight: 10,
             }}>
-            <Button onPress={onConfirm} title="Login" color="#B2DFDB" />
+            <Button
+              onPress={() => this.props.navigation.navigate('Audio')}
+              title="سجّل"
+              color="#B2DFDB"
+            />
           </View>
         </View>
       </ImageBackground>
