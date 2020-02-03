@@ -1,14 +1,24 @@
 import React, {Component} from 'react';
 import {TextInput, View, Button, ImageBackground} from 'react-native';
+import axios from 'axios';
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {name: '', pass: ''};
+    this.state = {name: '', pass: '', token: ''};
   }
   render() {
     onConfirm = () => {
-      alert(`UserName: ${this.state.name}\nPassword: ${this.state.pass}`);
+      axios
+        .post('http://localhost:8000/api/auth', {
+          email: this.state.name,
+          password: this.state.pass,
+        })
+        .then(token => {
+          this.props.navigation.navigate('Audio');
+          this.setState({token});
+        })
+        .catch(res => alert(`this is the error (${res})`));
     };
 
     return (
@@ -59,11 +69,7 @@ class LoginScreen extends Component {
               marginLeft: 10,
               marginRight: 10,
             }}>
-            <Button
-              onPress={() => this.props.navigation.navigate('Audio')}
-              title="Login"
-              color="#B2DFDB"
-            />
+            <Button onPress={onConfirm} title="Login" color="#B2DFDB" />
           </View>
         </View>
       </ImageBackground>
