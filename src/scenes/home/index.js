@@ -1,86 +1,96 @@
-import React, {Component} from 'react';
-import {View, Text, FlatList, Image} from 'react-native';
+import React from 'react';
+import {Text, View, ImageBackground, TouchableOpacity} from 'react-native';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
+import {ListItem, Separator} from 'native-base';
 
-class Home extends Component {
-  constructor() {
-    super();
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      FlatListItems: [
-        {key: 'حكم الإخفاء', category: ''},
-        {
-          key: 'حكم الادغام',
-          ImageUri: 'https://i.ytimg.com/vi/3Y1J6zWSEtU/hqdefault.jpg',
-          category: '',
-        },
-        {
-          key: 'أحكام النون',
-          ImageUri:
-            'https://media.mnn.com/assets/images/2018/08/grilled_salmon.jpg.653x0_q80_crop-smart.jpg',
-          category: '',
-        },
-        {
-          key: 'التفخيم',
-          ImageUri:
-            'https://media-cdn.tripadvisor.com/media/photo-s/0d/1e/10/55/harvest-kale-grilled.jpg',
-          category: '',
-        },
-        {
-          key: 'الترقيق',
-          ImageUri:
-            'https://assets.epicurious.com/photos/57bb35cdb6069b112362e097/2:1/w_1260%2Ch_630/pan-grilled-steak.jpg',
-          category: ' ',
-        },
+      Ahkam: [
+        'الإظهار',
+        'الإدغام',
+        'الإقلاب',
+        'الإخفاء',
+        'الإظهار الشفوي',
+        'الإدغام الشفوي',
+        'الإخفاء الشفوي',
       ],
     };
   }
-  GetItem(item) {
-    Alert.alert(item);
-  }
-  FlatListItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 5,
-          width: '100%',
-          backgroundColor: '#129D9B',
-        }}
-      />
-    );
-  };
-
   render() {
+    alt = () => {
+      alert('xcvfd');
+    };
     return (
-      <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            backgroundColor: 'black',
-          }}></View>
-        <FlatList
-          data={this.state.FlatListItems}
-          ItemSeparatorComponent={this.FlatListItemSeparator}
-          renderItem={({item}) => (
-            <View style={{flex: 1, flexDirection: 'row-reverse'}}>
-              <Image
-                source={{uri: item.ImageUri}}
-                style={{width: 0, height: 100, margin: 5}}
-              />
-              <View
-                style={{flex: 1, flexDirection: 'row-reverse', backgroundColor: ''}}>
-                <Text onPress={this.GetItem.bind(this, item.key)}>
-                  {' '}
-                  {item.key}{' '}
-                </Text>
-                <Text onPress={this.GetItem.bind(this, item.category)}>
-                  {' '}
-                  {item.category}{' '}
-                </Text>
-              </View>
-            </View>
-          )}
-        />
-      </View>
+      <ImageBackground
+        source={require('_assets/images/islamic.jpg')}
+        style={{
+          width: '100%',
+          height: '100%',
+          opacity: 100,
+        }}>
+        <View>
+          <Collapse>
+            <CollapseHeader>
+              <Separator bordered>
+                <Text>أحكام النون الساكنة والتنوين</Text>
+              </Separator>
+            </CollapseHeader>
+            <CollapseBody style={{flexDirection: 'row-reverse'}}>
+              <ListItem>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Ethhar')}>
+                  <Text>الإظهار</Text>
+                </TouchableOpacity>
+              </ListItem>
+
+              <ListItem>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Edgham')}>
+                  <Text>الإدغام</Text>
+                </TouchableOpacity>
+              </ListItem>
+
+              <ListItem>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Eqlab')}>
+                  <Text>الإقلاب</Text>
+                </TouchableOpacity>
+              </ListItem>
+
+              <ListItem last>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Ekhfaa')}>
+                  <Text>الإخفاء</Text>
+                </TouchableOpacity>
+              </ListItem>
+            </CollapseBody>
+          </Collapse>
+          <Collapse>
+            <CollapseHeader>
+              <Separator bordered>
+                <Text>أحكام الميم الساكنة والتنوين</Text>
+              </Separator>
+            </CollapseHeader>
+            <CollapseBody style={{flexDirection: 'row-reverse'}}>
+              <ListItem>
+                <Text>الإظهار الشفوي</Text>
+              </ListItem>
+              <ListItem>
+                <Text>الإدغام الشفوي</Text>
+              </ListItem>
+              <ListItem last>
+                <Text>الإخفاء الشفوي</Text>
+              </ListItem>
+            </CollapseBody>
+          </Collapse>
+        </View>
+      </ImageBackground>
     );
   }
 }

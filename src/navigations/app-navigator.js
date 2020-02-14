@@ -1,9 +1,6 @@
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import React, {Component} from 'react';
 //import PlayerScreen from 'react-native-sound-playerview';
-import Home from '_scenes/home';
-import About from '_scenes/about';
-import Validate from '_scenes/validate';
 import {
   StyleSheet,
   Text,
@@ -15,7 +12,14 @@ import {
   ScrollView,
 } from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
+import Home from '_scenes/home';
+import About from '_scenes/about';
+import Validate from '_scenes/validate';
 import Login from '_scenes/login';
+import Ethhar from '_scenes/Ethhar';
+import Edgham from '_scenes/Edgham';
+import Eqlab from '_scenes/Eqlab';
+import Ekhfaa from '_scenes/Ekhfaa';
 
 class NavigationDrawerStructure extends Component {
   constructor(props) {
@@ -61,6 +65,26 @@ const HomeStack = createStackNavigator({
       },
       headerTintColor: '#ffffff',
     }),
+  },
+  Ethhar: {
+    screen: Ethhar,
+    headerMode: 'none',
+    header: null,
+  },
+  Edgham: {
+    screen: Edgham,
+    headerMode: 'none',
+    header: null,
+  },
+  Eqlab: {
+    screen: Eqlab,
+    headerMode: 'none',
+    header: null,
+  },
+  Ekhfaa: {
+    screen: Ekhfaa,
+    headerMode: 'none',
+    header: null,
   },
 });
 

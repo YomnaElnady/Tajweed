@@ -10,15 +10,14 @@ class LoginScreen extends Component {
   render() {
     onConfirm = () => {
       axios
-        .post('http://localhost:8000/api/auth', {
+        .post('http://192.168.1.27:3001/api/auth', {
           email: this.state.name,
           password: this.state.pass,
         })
-        .then(token => {
-          this.props.navigation.navigate('Audio');
-          this.setState({token});
+        .then(response => {
+          this.props.navigation.navigate('Audio', {token: response.data});
         })
-        .catch(res => alert(`this is the error (${res})`));
+        .catch(error => alert(error.response.data));
     };
 
     return (
@@ -44,7 +43,7 @@ class LoginScreen extends Component {
               borderRadius: 50,
             }}
             on
-            placeholder="اسم المستخدم"
+            placeholder="البريد الالكتروني"
             onChangeText={name => this.setState({name})}
             value={this.state.name}
           />
@@ -60,6 +59,7 @@ class LoginScreen extends Component {
               borderRadius: 50,
             }}
             placeholder="كلمة المرور"
+            secureTextEntry={true}
             value={this.state.pass}
           />
           <View
@@ -69,11 +69,7 @@ class LoginScreen extends Component {
               marginLeft: 10,
               marginRight: 10,
             }}>
-            <Button
-              onPress={() => this.props.navigation.navigate('Audio')}
-              title="سجّل"
-              color="#B2DFDB"
-            />
+            <Button onPress={onConfirm} title="سجّل" color="#B2DFDB" />
           </View>
         </View>
       </ImageBackground>
