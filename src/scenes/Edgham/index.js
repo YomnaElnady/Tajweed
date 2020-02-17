@@ -3,11 +3,13 @@ import {
   View,
   Text,
   FlatList,
-  Image,
+  Button,
   Alert,
   ImageBackground,
 } from 'react-native';
 import {Card} from 'react-native-elements';
+import SwipeablePanel from 'rn-swipeable-panel';
+
 class Edgham extends Component {
   constructor() {
     super();
@@ -64,18 +66,13 @@ class Edgham extends Component {
   GetItem(item) {
     this.props.navigation.navigate('Methal');
   }
-  FlatListItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 5,
-          width: '100%',
-          backgroundColor: '#129D9B',
-        }}
-      />
-    );
+  openPanel = () => {
+    this.setState({swipeablePanelActive: true});
   };
 
+  closePanel = () => {
+    this.setState({swipeablePanelActive: false});
+  };
   render() {
     return (
       <ImageBackground
@@ -86,6 +83,106 @@ class Edgham extends Component {
           opacity: 100,
         }}>
         <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
+          <Button
+            title="انظر شرح الحكم"
+            color="#B2DFDB"
+            onPress={() => this.openPanel()}
+          />
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <SwipeablePanel
+              fullWidth
+              isActive={this.state.swipeablePanelActive}
+              onClose={this.closePanel}
+              onPressCloseButton={this.closePanel}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                الإدغام
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                لغة: الإدخال.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                اصطلاحا: اللفظ بحرفين حرفا واحدا مشددا من جنس الثاني. أو التلفظ
+                بساكن فمتحرك بلا فصل من مخرج واحد.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                حروفه: تُدغم النون الساكنة والتنوين في ستة حروف مجموعة في كلمة
+                (يرملون)
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                أقسامه: قسمان إدغام بغنة وإدغام بلا غنة.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                1. إدغام بغنة: يكون الإدغام بغنة إذا وقع بعد النون الساكنة أو
+                التنوين أحد حروف كلمة (ينمو).
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                وهو على قسمين: إدغام كامل بغنة وإدغام ناقص بغنة.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                إدغام كامل بغنة: له حرفان الميم والنون. والغنة الباقية عند إدغام
+                النون الساكنة أو التنوين في هذين الحرفين تكون للحرف المدغم فيه
+                ولهذا كان الإدغام كاملا.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                إدغام ناقص بغنة: له حرفان الواو والياء. والإدغام ناقص هنا لأن
+                الغنة الباقية صفة للحرف المدغم.
+              </Text>
+            </SwipeablePanel>
+          </View>
           <FlatList
             data={this.state.FlatListItems}
             renderItem={({item}) => (

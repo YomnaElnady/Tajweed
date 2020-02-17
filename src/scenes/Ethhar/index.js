@@ -3,15 +3,18 @@ import {
   View,
   Text,
   FlatList,
-  Image,
+  Button,
   Alert,
   ImageBackground,
 } from 'react-native';
 import {Card} from 'react-native-elements';
+import SwipeablePanel from 'rn-swipeable-panel';
+
 class Ethhar extends Component {
   constructor() {
     super();
     this.state = {
+      swipeablePanelActive: false,
       FlatListItems: [
         {key: '﴿مَنْ أَعْرَضَ﴾ ', hokm: 'النون الساكنة مع الهمزة'},
         {
@@ -64,6 +67,13 @@ class Ethhar extends Component {
   GetItem(item) {
     this.props.navigation.navigate('Methal');
   }
+  openPanel = () => {
+    this.setState({swipeablePanelActive: true});
+  };
+
+  closePanel = () => {
+    this.setState({swipeablePanelActive: false});
+  };
   FlatListItemSeparator = () => {
     return (
       <View
@@ -86,6 +96,70 @@ class Ethhar extends Component {
           opacity: 100,
         }}>
         <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
+          <Button
+            title="انظر شرح الحكم"
+            color="#B2DFDB"
+            onPress={() => this.openPanel()}
+          />
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <SwipeablePanel
+              fullWidth
+              isActive={this.state.swipeablePanelActive}
+              onClose={this.closePanel}
+              onPressCloseButton={this.closePanel}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                الإظهار
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                لغة: البيان
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                اصطلاحا: إخراج كل حرف من مخرجه من غير زيادة في غنة الحرف
+                المُظهَر. وعلى هذا يجب فصل النون الساكنة أو التنوين عن الحرف
+                الذي بعدها من غير سكت عليه.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                حروفه: تظهر النون الساكنة أو التنوين إذا وقع بعدها حرف من حروف
+                الحلق الستة: الهمزة والهاء والعين والحاء والغين والخاء (ء هـ ع ح
+                غ خ) وهذه الحروف مجموعة في أوائل هذه الكلمات: أخي هاك علما حازه
+                غير خاسر.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  fontFamily: 'Cochin',
+                  margin: 15,
+                }}>
+                ويكون إظهار النون الساكنة في الكلمة الواحدة وفي الكلمتين. أما
+                إظهار التنوين فلا يقع حتما إلا في كلمتين.
+              </Text>
+            </SwipeablePanel>
+          </View>
           <FlatList
             data={this.state.FlatListItems}
             renderItem={({item}) => (
