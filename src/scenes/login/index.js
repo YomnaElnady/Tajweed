@@ -10,11 +10,12 @@ class LoginScreen extends Component {
   render() {
     onConfirm = () => {
       axios
-        .post('http://192.168.1.27:3001/api/auth', {
+        .post('http://192.168.1.7:3001/api/auth', {
           email: this.state.name,
           password: this.state.pass,
         })
         .then(response => {
+          // console.log(response);
           this.props.navigation.navigate('Audio', {token: response.data});
         })
         .catch(error => alert(error.response.data));
