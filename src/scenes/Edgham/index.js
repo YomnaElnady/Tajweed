@@ -85,7 +85,7 @@ class Edgham extends Component {
         <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
           <Button
             title="انظر شرح الحكم"
-            color="#B2DFDB"
+            color="#1ABC9C"
             onPress={() => this.openPanel()}
           />
           <View style={{justifyContent: 'center', alignItems: 'center'}}>

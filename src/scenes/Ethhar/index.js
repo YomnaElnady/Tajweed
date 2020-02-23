@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
+import PlayerScreen from 'react-native-sound-playerview';
 
 class Ethhar extends Component {
   constructor() {
@@ -98,7 +99,7 @@ class Ethhar extends Component {
         <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
           <Button
             title="انظر شرح الحكم"
-            color="#B2DFDB"
+            color="#1ABC9C"
             onPress={() => this.openPanel()}
           />
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -172,7 +173,19 @@ class Ethhar extends Component {
                     borderRadius: 10,
                   }}>
                   <Card title={item.hokm}>
-                    <Text style={{marginBottom: 10}}>{item.key}</Text>
+                    <View style={{flex: 1}}>
+                      <Text
+                        style={{
+                          marginBottom: 10,
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                        }}>
+                        {item.key}
+                      </Text>
+                      <View style={{flex: 0.25}}>
+                        <PlayerScreen filepath="elmasad_1.mp3" />
+                      </View>
+                    </View>
                   </Card>
                 </View>
               </View>

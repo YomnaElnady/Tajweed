@@ -10,7 +10,7 @@ class LoginScreen extends Component {
   render() {
     onConfirm = () => {
       axios
-        .post('http://192.168.1.7:3001/api/auth', {
+        .post('http://192.168.1.9:3001/api/auth', {
           email: this.state.name,
           password: this.state.pass,
         })
@@ -70,7 +70,7 @@ class LoginScreen extends Component {
               marginLeft: 10,
               marginRight: 10,
             }}>
-            <Button onPress={onConfirm} title="سجّل" color="#B2DFDB" />
+            <Button onPress={onConfirm} title="سجّل" color="#1ABC9C" />
           </View>
         </View>
       </ImageBackground>

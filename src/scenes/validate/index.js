@@ -14,7 +14,7 @@ class Validate extends Component {
     await this.setState({label: true});
     //alert(this.state.id);
     axios
-      .put(`http://192.168.1.7:3001/api/label/${this.state.id}`, {
+      .put(`http://192.168.1.9:3001/api/label/${this.state.id}`, {
         correct: this.state.label,
       })
       .then(response => {
@@ -26,7 +26,7 @@ class Validate extends Component {
     await this.setState({label: false});
     //alert(this.state.id);
     axios
-      .put(`http://192.168.1.7:3001/api/label/${this.state.id}`, {
+      .put(`http://192.168.1.9:3001/api/label/${this.state.id}`, {
         correct: this.state.label,
       })
       .then(response => {
@@ -36,7 +36,7 @@ class Validate extends Component {
   };
   getRecord = async () => {
     axios
-      .get('http://192.168.1.7:3001/api/client/random')
+      .get('http://192.168.1.9:3001/api/client/random')
       .then(response => {
         console.log('this is the response', response);
         this.setState({
@@ -69,17 +69,17 @@ class Validate extends Component {
           <Button
             onPress={this.trueRecord}
             title=" صح"
-            color="#B2DFDB"
+            color="#1ABC9C"
             //icon={<Icon name="check" color="white" />}
           />
 
           <Button
             onPress={this.falseRecord}
             title=" خطأ"
-            color="#B2DFDB"
+            color="#1ABC9C"
             //icon={<Icon name="times" color="white" />}
           />
-          <Button onPress={this.getRecord} title="تسجيل جديد" color="#B2DFDB" />
+          <Button onPress={this.getRecord} title="تسجيل جديد" color="#1ABC9C" />
         </View>
       </View>
     );

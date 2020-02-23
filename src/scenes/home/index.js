@@ -38,7 +38,15 @@ class Home extends React.Component {
           <Collapse>
             <CollapseHeader>
               <Separator bordered>
-                <Text>أحكام النون الساكنة والتنوين</Text>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#33691E',
+                    marginRight: 10,
+                  }}>
+                  أحكام النون الساكنة والتنوين
+                </Text>
               </Separator>
             </CollapseHeader>
             <CollapseBody style={{flexDirection: 'row-reverse'}}>
@@ -74,7 +82,15 @@ class Home extends React.Component {
           <Collapse>
             <CollapseHeader>
               <Separator bordered>
-                <Text>أحكام الميم الساكنة والتنوين</Text>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: '#33691E',
+                    marginRight: 10,
+                  }}>
+                  أحكام الميم الساكنة والتنوين
+                </Text>
               </Separator>
             </CollapseHeader>
             <CollapseBody style={{flexDirection: 'row-reverse'}}>
