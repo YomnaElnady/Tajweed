@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import PlayerScreen from 'react-native-sound-playerview';
+import {StackNavigator} from 'react-navigation';
+import AudioRecord from 'react-native-audio-record';
+
 import {
   View,
   Text,
@@ -6,17 +10,82 @@ import {
   Button,
   Alert,
   ImageBackground,
+  TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
+
+//var audio =''
+
+async function requestMicrophonePermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      {
+        title: "Requesting Microphone Access",
+        message: "App needs permission to access to your microphone "
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("You can use the microphone");
+    } else {
+      console.log("Microphone permission denied");
+      alert("Microphone permission denied");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
+async function requestWritePermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: "Requesting Microphone Access",
+        message: "App needs permission to access to your microphone "
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("You can use the microphone");
+    } else {
+      console.log("Microphone permission denied");
+      alert("Microphone permission denied");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
+requestMicrophonePermission();
+requestWritePermission();
+
+const options = {
+  sampleRate: 16000,  // default 44100
+  channels: 1,        // 1 or 2, default 1
+  bitsPerSample: 16,  // 8 or 16, default 16
+  audioSource: 6,     // android only (see below)
+  wavFile: 'test.wav' // default 'audio.wav'
+};
+
+AudioRecord.init(options);
+
+
+
 
 class Ethhar extends Component {
   constructor() {
     super();
     this.state = {
       swipeablePanelActive: false,
+      audio:'test.wav',
+      hasRecord: false,
       FlatListItems: [
-        {key: '﴿مَنْ أَعْرَضَ﴾ ', hokm: 'النون الساكنة مع الهمزة'},
+        {key: '﴿مَنْ أَعْرَضَ﴾ ', 
+        hokm: 'النون الساكنة مع الهمزة',
+        voice: "elmasad_1.mp3",
+      
+        },
         {
           key: '﴿جَنَّاتٍ أَلْفَافاً﴾ ',
           hokm: '  التنوين مع الهمزة',
@@ -74,6 +143,46 @@ class Ethhar extends Component {
   closePanel = () => {
     this.setState({swipeablePanelActive: false});
   };
+  
+  startRecord(){
+      
+    AudioRecord.start()
+    Alert.alert('بدأت التسجيل')
+  
+  }  
+   
+
+ async stopRecord(){  
+    audioFile = await AudioRecord.stop()  
+    console.log(audioFile)
+    this.setState({audio: audioFile});
+    this.setState({hasRecord: false});
+  
+   //console.log(hasRecord)   
+  }
+
+  componentDidMount=()=>{
+    this.setState({hasRecord: true})
+}
+
+   viewButtons= ()=>{
+      return(
+    <View> 
+  <Button
+  title="ارسل التسجيل"
+  color="#00C788"
+  onPress={() => Alert.alert('Button with adjusted color pressed')}
+  />
+
+<Button
+  title="امسح التسجيل"
+  color="#00C788"
+  onPress={() => Alert.alert('Button with adjusted color pressed')}
+  /> 
+  </View> 
+  ); 
+   };
+
   FlatListItemSeparator = () => {
     return (
       <View
@@ -87,6 +196,9 @@ class Ethhar extends Component {
   };
 
   render() {
+
+    
+    
     return (
       <ImageBackground
         source={require('_assets/images/islamic.jpg')}
@@ -171,13 +283,38 @@ class Ethhar extends Component {
                     backgroundColor: '',
                     borderRadius: 10,
                   }}>
+              
+
                   <Card title={item.hokm}>
                     <Text style={{marginBottom: 10}}>{item.key}</Text>
+                    <PlayerScreen filepath= 'elmasad_1.mp3' />
+                    <View  style={{flex:1 }}>
+           <PlayerScreen filepath='/data/user/0/com.tajweed/files/test.wav'/>
+
+
+              <TouchableOpacity onPress={this.startRecord}>
+             <Text>إبدأ التسجيل</Text>
+    </TouchableOpacity> 
+    <TouchableOpacity onPress={this.stopRecord.bind(this) }>
+             <Text>انتهيت</Text>
+    </TouchableOpacity> 
+
+   <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+   
+       </View>    
+
+
+       {this.props.hasRecord ? viewButtons : <View/>}
+
+    </View>
+                 
                   </Card>
                 </View>
               </View>
             )}
           />
+     
+     
         </View>
       </ImageBackground>
     );
