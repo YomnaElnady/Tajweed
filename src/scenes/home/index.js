@@ -89,19 +89,34 @@ class Home extends React.Component {
                     color: '#33691E',
                     marginRight: 10,
                   }}>
-                  أحكام الميم الساكنة والتنوين
+                  أحكام الميم الساكنة
                 </Text>
               </Separator>
             </CollapseHeader>
             <CollapseBody style={{flexDirection: 'row-reverse'}}>
               <ListItem>
-                <Text>الإظهار الشفوي</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('EthharShafawy')
+                  }>
+                  <Text>الإظهار الشفوي</Text>
+                </TouchableOpacity>
               </ListItem>
               <ListItem>
-                <Text>الإدغام الشفوي</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('EdghamShafawy')
+                  }>
+                  <Text>الإدغام الشفوي</Text>
+                </TouchableOpacity>
               </ListItem>
               <ListItem last>
-                <Text>الإخفاء الشفوي</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('EkhfaaShafawy')
+                  }>
+                  <Text>الإخفاء الشفوي</Text>
+                </TouchableOpacity>
               </ListItem>
             </CollapseBody>
           </Collapse>

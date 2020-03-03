@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, FlatList, Button, ImageBackground} from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
+import PlayerScreen from 'react-native-sound-playerview';
 
 class Ekhfaa extends Component {
   constructor() {
@@ -9,13 +10,34 @@ class Ekhfaa extends Component {
     this.state = {
       FlatListItems: [
         {key: '﴿مَنْصُوراً﴾', hokm: 'النون الساكنة مع الصاد'},
+        {key: '﴿رِيحًا صرصرًا﴾', hokm: 'التنوين مع الصاد'},
         {
           key: '﴿مَّن ذَا﴾',
           hokm: 'النون الساكنة مع الذال',
         },
         {
+          key: '﴿سراعاً ذلك﴾',
+          hokm: 'التنوين مع الذال',
+        },
+        {
+          key: '﴿منثورا﴾',
+          hokm: 'النون الساكنة مع الثاء',
+        },
+        {
+          key: '﴿تمهيداً ثمّ﴾',
+          hokm: 'التنوين مع الثاء',
+        },
+        {
           key: '﴿الإِنْسَانَ﴾ ',
           hokm: 'النون الساكنة مع السين',
+        },
+        {
+          key: '﴿عابدتٍ سائحات﴾ ',
+          hokm: 'التنوين مع السين',
+        },
+        {
+          key: '﴿منْكُم﴾ ',
+          hokm: 'النون الساكنة مع الكاف',
         },
         {
           key: '﴿لَيَؤُوسٌ كَـفُورٌ﴾ ',
@@ -26,40 +48,80 @@ class Ekhfaa extends Component {
           hokm: 'النون الساكنة مع الجيم',
         },
         {
+          key: '﴿فصبرٌ جميل﴾',
+          hokm: 'التنوين مع الجيم',
+        },
+        {
           key: '﴿مِن شَيْءٍ﴾ ',
           hokm: 'النون الساكنة مع الشين',
+        },
+        {
+          key: '﴿علمٍ شيئًا﴾ ',
+          hokm: 'التنوين مع الشين',
         },
         {
           key: '﴿مِن قَبْلِهِ﴾',
           hokm: 'النون الساكنة مع القاف',
         },
         {
+          key: '﴿ثمناً قليلا﴾',
+          hokm: 'التنوين مع القاف',
+        },
+        {
           key: '﴿أَندَاداً﴾ ',
           hokm: 'النون الساكنة مع الدال',
+        },
+        {
+          key: '﴿قنوانٍ دانية﴾ ',
+          hokm: 'التنوين مع الدال',
         },
         {
           key: '﴿يَنطِـقُونَ﴾ ',
           hokm: 'النون الساكنة مع الطاء',
         },
         {
+          key: '﴿حلالاً طيبا﴾ ',
+          hokm: 'التنوين مع الطاء',
+        },
+        {
           key: '﴿أَنزَلْنَا﴾',
           hokm: 'النون الساكنة مع الزين',
+        },
+        {
+          key: '﴿يومئذٍ زرقا﴾',
+          hokm: 'التنوين مع الزين',
         },
         {
           key: '﴿شَيْءٍ فَإِنَّ﴾',
           hokm: 'النون الساكنة مع الفاء',
         },
         {
+          key: '﴿سوءٍ فاسقين﴾',
+          hokm: 'التنوين مع الفاء',
+        },
+        {
           key: '﴿وَأَنتُمْ﴾',
           hokm: 'النون الساكنة مع التاء',
+        },
+        {
+          key: '﴿جناتٍ تجري﴾',
+          hokm: 'التنوين مع التاء',
         },
         {
           key: '﴿مِّن ضَعْفٍ﴾',
           hokm: 'النون الساكنة مع الضاد',
         },
         {
+          key: '﴿مسجداً ضرارا﴾',
+          hokm: 'التنوين مع الضاد',
+        },
+        {
           key: '﴿تَنظُرُونَ﴾',
           hokm: 'النون الساكنة مع الظاء',
+        },
+        {
+          key: '﴿قومٌ ظلموا﴾',
+          hokm: 'التنوين مع الظاء',
         },
       ],
     };
@@ -102,7 +164,7 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                الإدغام
+                الإخفاء
               </Text>
               <Text
                 style={{
@@ -111,7 +173,7 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                لغة: الإدخال.
+                لغة: الستر.
               </Text>
               <Text
                 style={{
@@ -120,8 +182,8 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                اصطلاحا: اللفظ بحرفين حرفا واحدا مشددا من جنس الثاني. أو التلفظ
-                بساكن فمتحرك بلا فصل من مخرج واحد.
+                اصطلاحا: النطق بالنون اساكنة أو التنوين على صفة بين الإظهار
+                والإدغام مع مراعاة بقاء الغنة في الحرف المخفي.
               </Text>
               <Text
                 style={{
@@ -130,8 +192,7 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                حروفه: تُدغم النون الساكنة والتنوين في ستة حروف مجموعة في كلمة
-                (يرملون)
+                حروفه: خمسة عشر حرفا مجموعة في أوائل كلمات البيت التالي:
               </Text>
               <Text
                 style={{
@@ -140,7 +201,7 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                أقسامه: قسمان إدغام بغنة وإدغام بلا غنة.
+                صف ذا ثـنا كم جاد شخص قد سـما دم طيبا زد فـي تقى ضـع ظـالما
               </Text>
               <Text
                 style={{
@@ -149,8 +210,10 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                1. إدغام بغنة: يكون الإدغام بغنة إذا وقع بعد النون الساكنة أو
-                التنوين أحد حروف كلمة (ينمو).
+                أداء الإخفاء: عند إخفاء النون الساكنة أو التنوين يتحول مخرج
+                النون من طرف اللسان (مع لثة الأسنان العليا) إلى قرب مخرج حرف
+                الإخفاء. أي أن القارئ يجعل طرف لسانه مبتعدا قليلا عن لثة الأسنان
+                العليا.
               </Text>
               <Text
                 style={{
@@ -159,7 +222,8 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                وهو على قسمين: إدغام كامل بغنة وإدغام ناقص بغنة.
+                كما يُراعى أيضا مد الغنة مقدار حركتين، وتفخيمها –أي الغنة- إذا
+                .كان حرف الإخفاء مفخما، وترقيقها إذا كان حرف الإخفاء مرققا
               </Text>
               <Text
                 style={{
@@ -168,19 +232,8 @@ class Ekhfaa extends Component {
                   fontFamily: 'Cochin',
                   margin: 15,
                 }}>
-                إدغام كامل بغنة: له حرفان الميم والنون. والغنة الباقية عند إدغام
-                النون الساكنة أو التنوين في هذين الحرفين تكون للحرف المدغم فيه
-                ولهذا كان الإدغام كاملا.
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  fontFamily: 'Cochin',
-                  margin: 15,
-                }}>
-                إدغام ناقص بغنة: له حرفان الواو والياء. والإدغام ناقص هنا لأن
-                الغنة الباقية صفة للحرف المدغم.
+                هذا ويجب الاحتراز من تحويل الغنة إلى حرف مد كنطق كلمة "كـنـتم"
+                هكذا: "كونـتم" وهذا خطأ.
               </Text>
             </SwipeablePanel>
           </View>
@@ -199,6 +252,9 @@ class Ekhfaa extends Component {
                     }}>
                     <Card title={item.hokm}>
                       <Text style={{marginBottom: 10}}>{item.key}</Text>
+                      <View style={{flex: 0.25}}>
+                        <PlayerScreen filepath="elmasad_1.mp3" />
+                      </View>
                     </Card>
                   </View>
                 </View>
