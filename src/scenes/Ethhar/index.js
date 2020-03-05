@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
+//import PlayerScreen from 'react-native-sound-playerview';
 
 //var audio =''
 
@@ -76,10 +77,15 @@ AudioRecord.init(options);
 class Ethhar extends Component {
   constructor() {
     super();
+    this.stopRecord = this.stopRecord.bind(this)
+    this.startRecord = this.startRecord.bind(this)
+
+
     this.state = {
       swipeablePanelActive: false,
       audio:'test.wav',
-      hasRecord: false,
+      hasRecord: true,
+
       FlatListItems: [
         {key: '﴿مَنْ أَعْرَضَ﴾ ', 
         hokm: 'النون الساكنة مع الهمزة',
@@ -148,22 +154,24 @@ class Ethhar extends Component {
       
     AudioRecord.start()
     Alert.alert('بدأت التسجيل')
+    console.log(this.state.hasRecord)  
+     
+
+  } 
   
-  }  
-   
+  
+  
 
  async stopRecord(){  
     audioFile = await AudioRecord.stop()  
     console.log(audioFile)
     this.setState({audio: audioFile});
-    this.setState({hasRecord: false});
-  
-   //console.log(hasRecord)   
+    this.setState({hasRecord: !this.state.hasRecord});
+    console.log('انتهيت') 
+   console.log(this.state.hasRecord)   
   }
 
-  componentDidMount=()=>{
-    this.setState({hasRecord: true})
-}
+
 
    viewButtons= ()=>{
       return(
@@ -210,7 +218,7 @@ class Ethhar extends Component {
         <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
           <Button
             title="انظر شرح الحكم"
-            color="#B2DFDB"
+            color="#1ABC9C"
             onPress={() => this.openPanel()}
           />
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -295,7 +303,7 @@ class Ethhar extends Component {
               <TouchableOpacity onPress={this.startRecord}>
              <Text>إبدأ التسجيل</Text>
     </TouchableOpacity> 
-    <TouchableOpacity onPress={this.stopRecord.bind(this) }>
+    <TouchableOpacity onPress={this.stopRecord }>
              <Text>انتهيت</Text>
     </TouchableOpacity> 
 
@@ -304,10 +312,12 @@ class Ethhar extends Component {
        </View>    
 
 
-       {this.props.hasRecord ? viewButtons : <View/>}
+       {this.state.hasRecord ? this.viewButtons : null}
 
+       
     </View>
                  
+                  
                   </Card>
                 </View>
               </View>
