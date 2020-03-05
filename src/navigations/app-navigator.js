@@ -20,6 +20,9 @@ import Ethhar from '_scenes/Ethhar';
 import Edgham from '_scenes/Edgham';
 import Eqlab from '_scenes/Eqlab';
 import Ekhfaa from '_scenes/Ekhfaa';
+import EkhfaaShafawy from '_scenes/EkhfaaShafawy';
+import EthharShafawy from '_scenes/EthharShafawy';
+import EdghamShafawy from '_scenes/EdghamShafawy';
 
 class NavigationDrawerStructure extends Component {
   constructor(props) {
@@ -83,6 +86,21 @@ const HomeStack = createStackNavigator({
   },
   Ekhfaa: {
     screen: Ekhfaa,
+    headerMode: 'none',
+    header: null,
+  },
+  EkhfaaShafawy: {
+    screen: EkhfaaShafawy,
+    headerMode: 'none',
+    header: null,
+  },
+  EthharShafawy: {
+    screen: EthharShafawy,
+    headerMode: 'none',
+    header: null,
+  },
+  EdghamShafawy: {
+    screen: EdghamShafawy,
     headerMode: 'none',
     header: null,
   },

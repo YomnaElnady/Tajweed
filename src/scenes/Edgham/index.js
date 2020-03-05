@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
+import PlayerScreen from 'react-native-sound-playerview';
 
 class Edgham extends Component {
   constructor() {
@@ -196,6 +197,9 @@ class Edgham extends Component {
                   }}>
                   <Card title={item.hokm}>
                     <Text style={{marginBottom: 10}}>{item.key}</Text>
+                    <View style={{flex: 0.25}}>
+                      <PlayerScreen filepath="elmasad_1.mp3" />
+                    </View>
                   </Card>
                 </View>
               </View>
