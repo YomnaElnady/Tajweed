@@ -1,25 +1,67 @@
 import React, {Component} from 'react';
-import {TextInput, View, Button, ImageBackground} from 'react-native';
+import {TextInput, View, Button, ImageBackground, AsyncStorage, Alert} from 'react-native';
 import axios from 'axios';
+import { string } from 'prop-types';
+
+const userInfo={userName: "admin", password:"admin"}
+
+
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {name: '', pass: '', token: ''};
+    this.state = {password: '', password: '', token: ''};
+
+ 
   }
+
+  
   render() {
-    onConfirm = () => {
+
+    
+     
+     
+    
+    onCheck=async()=>{
+      if(userInfo.userName === this.state.userName && userInfo.password=== this.state.password){
+        alert('logged in')
+        const value=  await AsyncStorage.setItem('isLoggedIn', '1');     
+        this.props.navigation.navigate('Audio');
+
+      }else {
+
+        Alert.alert('something went off')
+      }
+    }
+    onConfirm=async() => {
+     
       axios
-        .post('http://192.168.1.9:3001/api/auth', {
-          email: this.state.name,
-          password: this.state.pass,
-        })
-        .then(response => {
-          // console.log(response);
-          this.props.navigation.navigate('Audio', {token: response.data});
-        })
-        .catch(error => alert(error.response.data));
-    };
+      .post("https://otrojjah-api.herokuapp.com/api/auth", {
+      email: this.state.email ,
+      password: this.state.password
+      })
+
+      
+   
+     .then(async (response) =>{ 
+     
+       console.log(response.data)
+       const jwt = await AsyncStorage.setItem('token',response.data)
+       const value=  await AsyncStorage.setItem('isLoggedIn', '1')
+       const value2 = await AsyncStorage.getItem('isLoggedIn')
+       Alert.alert(value2)
+    }).then( this.props.navigation.navigate('Audio'))
+ 
+    .catch(function(error) {
+
+      if (error.response.data == 'Invalid email or password.'){
+     Alert.alert('الإيميل او كلمة السر خطأ')
+     
+    }else{
+      Alert.alert(error.response.data)
+    }
+    });
+     };
 
     return (
       <ImageBackground
@@ -45,13 +87,15 @@ class LoginScreen extends Component {
             }}
             on
             placeholder="البريد الالكتروني"
-            onChangeText={name => this.setState({name})}
-            value={this.state.name}
+            onChangeText={email => this.setState({email})}
+            value={this.state.email}
+            autoCapitalize="none"
           />
 
           <TextInput
-            onChangeText={pass => this.setState({pass})}
+            onChangeText={password => this.setState({password})}
             style={{
+              
               height: 40,
               borderColor: 'gray',
               borderWidth: 1,
@@ -59,9 +103,11 @@ class LoginScreen extends Component {
               marginBottom: 20,
               borderRadius: 50,
             }}
+            
             placeholder="كلمة المرور"
             secureTextEntry={true}
-            value={this.state.pass}
+            value={this.state.password}
+            direction ='rtl'
           />
           <View
             style={{

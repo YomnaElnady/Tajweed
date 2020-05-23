@@ -12,6 +12,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   PermissionsAndroid,
+  Image
 } from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
@@ -48,7 +49,7 @@ async function requestWritePermission() {
       }
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("You can use the microphone");
+      console.log("You can use the external writing");
     } else {
       console.log("Microphone permission denied");
       alert("Microphone permission denied");
@@ -75,21 +76,23 @@ AudioRecord.init(options);
 
 
 class Ethhar extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.stopRecord = this.stopRecord.bind(this)
-    this.startRecord = this.startRecord.bind(this)
+   // this.startRecord = this.startRecord.bind(this)
 
 
     this.state = {
       swipeablePanelActive: false,
       audio:'test.wav',
-      hasRecord: true,
-
+      isLoading: true,
+      dataSource:[], 
       FlatListItems: [
         {key: '﴿مَنْ أَعْرَضَ﴾ ', 
         hokm: 'النون الساكنة مع الهمزة',
         voice: "elmasad_1.mp3",
+        hasRecord:false,
+        working:false
       
         },
         {
@@ -150,46 +153,45 @@ class Ethhar extends Component {
     this.setState({swipeablePanelActive: false});
   };
   
-  startRecord(){
-      
+  startRecord =()=>{
+    this.setState({hasRecord:false});  
     AudioRecord.start()
-    Alert.alert('بدأت التسجيل')
     console.log(this.state.hasRecord)  
+    this.setState({working: !this.state.working});
      
 
   } 
   
   
   
+  
 
  async stopRecord(){  
+   const hasRecord=true
+   this.setState({hasRecord: true});
+   this.setState({working: !this.state.working});
     audioFile = await AudioRecord.stop()  
     console.log(audioFile)
     this.setState({audio: audioFile});
-    this.setState({hasRecord: !this.state.hasRecord});
     console.log('انتهيت') 
    console.log(this.state.hasRecord)   
   }
 
 
-
-   viewButtons= ()=>{
-      return(
-    <View> 
-  <Button
-  title="ارسل التسجيل"
-  color="#00C788"
-  onPress={() => Alert.alert('Button with adjusted color pressed')}
-  />
-
-<Button
-  title="امسح التسجيل"
-  color="#00C788"
-  onPress={() => Alert.alert('Button with adjusted color pressed')}
-  /> 
-  </View> 
-  ); 
-   };
+   componentDidMount() {
+    try {
+    fetch('https://otrojjah-api.herokuapp.com/api/verse')
+     .then((response)=> response.json())
+     .then((responseJson)=>{
+       this.setState({
+         isLoading:false,
+         FlatListItems: responseJson
+       })
+     })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   FlatListItemSeparator = () => {
     return (
@@ -203,132 +205,178 @@ class Ethhar extends Component {
     );
   };
 
+ 
   render() {
-
     
+    let {dataSource, isLoading}= this.state
     
-    return (
-      <ImageBackground
-        source={require('_assets/images/islamic.jpg')}
-        style={{
-          width: '100%',
-          height: '100%',
-          opacity: 100,
-        }}>
-        <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
-          <Button
-            title="انظر شرح الحكم"
-            color="#1ABC9C"
-            onPress={() => this.openPanel()}
-          />
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <SwipeablePanel
-              fullWidth
-              isActive={this.state.swipeablePanelActive}
-              onClose={this.closePanel}
-              onPressCloseButton={this.closePanel}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  fontFamily: 'Cochin',
-                  margin: 15,
-                }}>
-                الإظهار
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  fontFamily: 'Cochin',
-                  margin: 15,
-                }}>
-                لغة: البيان
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  fontFamily: 'Cochin',
-                  margin: 15,
-                }}>
-                اصطلاحا: إخراج كل حرف من مخرجه من غير زيادة في غنة الحرف
-                المُظهَر. وعلى هذا يجب فصل النون الساكنة أو التنوين عن الحرف
-                الذي بعدها من غير سكت عليه.
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  fontFamily: 'Cochin',
-                  margin: 15,
-                }}>
-                حروفه: تظهر النون الساكنة أو التنوين إذا وقع بعدها حرف من حروف
-                الحلق الستة: الهمزة والهاء والعين والحاء والغين والخاء (ء هـ ع ح
-                غ خ) وهذه الحروف مجموعة في أوائل هذه الكلمات: أخي هاك علما حازه
-                غير خاسر.
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  fontFamily: 'Cochin',
-                  margin: 15,
-                }}>
-                ويكون إظهار النون الساكنة في الكلمة الواحدة وفي الكلمتين. أما
-                إظهار التنوين فلا يقع حتما إلا في كلمتين.
-              </Text>
-            </SwipeablePanel>
-          </View>
-          <FlatList
-            data={this.state.FlatListItems}
-            renderItem={({item}) => (
-              <View style={{flex: 1, flexDirection: 'row-reverse'}}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    backgroundColor: '',
-                    borderRadius: 10,
-                  }}>
-              
-
-                  <Card title={item.hokm}>
-                    <Text style={{marginBottom: 10}}>{item.key}</Text>
-                    <PlayerScreen filepath= 'elmasad_1.mp3' />
-                    <View  style={{flex:1 }}>
-           <PlayerScreen filepath='/data/user/0/com.tajweed/files/test.wav'/>
-
-
-              <TouchableOpacity onPress={this.startRecord}>
-             <Text>إبدأ التسجيل</Text>
-    </TouchableOpacity> 
-    <TouchableOpacity onPress={this.stopRecord }>
-             <Text>انتهيت</Text>
-    </TouchableOpacity> 
-
-   <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-   
-       </View>    
-
-
-       {this.state.hasRecord ? this.viewButtons : null}
-
+    viewButtons= ()=>{
+      return(
+        <View style={{flexDirection:'row', justifyContent:'space-around'}}> 
+        <Button
+        title="ارسل التسجيل"
+        color="#00C788"
+        onPress={() => this.setState({hasRecord: false})}
+        />
+      
+      <Button
+        title="امسح التسجيل"
+        color="#00C788"
+        onPress={() => Alert.alert('Button with adjusted color pressed')}
+        /> 
+        </View> 
+        ); 
+         };
        
-    </View>
-                 
-                  
-                  </Card>
+          return (
+            <ImageBackground
+              source={require('_assets/images/islamic.jpg')}
+              style={{
+                width: '100%',
+                height: '100%',
+                opacity: 100,
+                
+              }}>
+             
+              <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
+                <Button
+                  title="انظر شرح الحكم"
+                  color="#1ABC9C"
+                  onPress={() => this.openPanel()}
+                />
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <SwipeablePanel
+                    fullWidth
+                    isActive={this.state.swipeablePanelActive}
+                    onClose={this.closePanel}
+                    onPressCloseButton={this.closePanel}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        fontFamily: 'Cochin',
+                        margin: 15,
+                      }}>
+                      الإظهار
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        fontFamily: 'Cochin',
+                        margin: 15,
+                      }}>
+                      لغة: البيان
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        fontFamily: 'Cochin',
+                        margin: 15,
+                      }}>
+                      اصطلاحا: إخراج كل حرف من مخرجه من غير زيادة في غنة الحرف
+                      المُظهَر. وعلى هذا يجب فصل النون الساكنة أو التنوين عن الحرف
+                      الذي بعدها من غير سكت عليه.
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        fontFamily: 'Cochin',
+                        margin: 15,
+                      }}>
+                      حروفه: تظهر النون الساكنة أو التنوين إذا وقع بعدها حرف من حروف
+                      الحلق الستة: الهمزة والهاء والعين والحاء والغين والخاء (ء هـ ع ح
+                      غ خ) وهذه الحروف مجموعة في أوائل هذه الكلمات: أخي هاك علما حازه
+                      غير خاسر.
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        fontFamily: 'Cochin',
+                        margin: 15,
+                      }}>
+                      ويكون إظهار النون الساكنة في الكلمة الواحدة وفي الكلمتين. أما
+                      إظهار التنوين فلا يقع حتما إلا في كلمتين.
+                    </Text>
+                  </SwipeablePanel>
                 </View>
+                <FlatList
+                  data={this.state.FlatListItems}
+                  extraData={this.state}
+                 // renderItem={this._renderItem} 
+                  keyExtractor={(item,index) => index.toString()}   
+                  renderItem={({item}) => (
+                    
+                     <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+                       <View
+                         style={{
+                           flex: 1,
+                           flexDirection: 'column',
+                           backgroundColor: '',
+                         borderRadius: 10,
+                       }}>
+                    
+      
+                         <Card title={item.name}>
+                           <Text style={{marginBottom: 10}}>{item.key}</Text>
+                           <PlayerScreen filepath= 'elmasad_1.mp3' />
+                          
+                   <View  style={{flex:1 }}>
+                { this.state.hasRecord && <PlayerScreen filepath='/data/user/0/com.tajweed/files/test.wav'/> }
+         
+               { !this.state.working &&     <TouchableOpacity 
+                     onPress={this.startRecord} 
+                     style={{justifyContent:'center', alignItems:'center'}}
+                     >
+                   
+                   <Image  style={{width:150, height:150, }}
+                   source={require('_assets/images/rec.png')}/>
+                     
+           </TouchableOpacity> 
+                  }
+          {/* stop */}
+
+           { this.state.working &&
+           <TouchableOpacity 
+                     onPress={this.stopRecord} 
+                     style={{justifyContent:'center', alignItems:'center'}}
+                     >
+                   
+                   <Image  style={{width:65, height:65, }}
+                   source={require('_assets/images/stop.png')}/>
+                     
+           </TouchableOpacity>
+                  }
+      
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+         
+              </View>    
+      
+              {this.state.hasRecord && viewButtons()  }
+             
+            
+             
+           </View>
+                       
+                        
+                       </Card>
+                      </View>
+                     </View>
+                    )}
+                />
+           
+           
               </View>
-            )}
-          />
-     
-     
-        </View>
-      </ImageBackground>
-    );
-  }
+            </ImageBackground>
+          );}
+         
+
+
+          
+  
 }
 
 export default Ethhar;

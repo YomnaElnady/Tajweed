@@ -10,6 +10,10 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
+  StatusBar,
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import Home from '_scenes/home';
@@ -23,6 +27,10 @@ import Ekhfaa from '_scenes/Ekhfaa';
 import EkhfaaShafawy from '_scenes/EkhfaaShafawy';
 import EthharShafawy from '_scenes/EthharShafawy';
 import EdghamShafawy from '_scenes/EdghamShafawy';
+import Random from '_scenes/random';
+
+
+import { createAppContainer, createSwitchNavigator, createNavigationContainer } from 'react-navigation';
 
 class NavigationDrawerStructure extends Component {
   constructor(props) {
@@ -58,6 +66,13 @@ const DrawerNavigatorConfig = {
 };
 
 const HomeStack = createStackNavigator({
+ 
+  Random: {
+    screen: Random,
+    headerMode: 'none',
+    header: null,
+  },
+
   Home: {
     screen: Home,
     navigationOptions: ({navigation}) => ({
@@ -120,9 +135,37 @@ const AboutStack = createStackNavigator({
   },
 });
 
+
+const RandomStack = createStackNavigator({
+  Random: {
+    screen: Random,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerLeft: <NavigationDrawerStructure navigation={navigation} />,
+      headerStyle: {
+        backgroundColor: 'none',
+      },
+      headerTintColor: '#ffffff',
+    }),
+  },
+});
+
+
+loadData =async()=>{
+  const isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
+  if (isLoggedIn == '1'){
+    return true;
+  }else return false;
+}
+
+
+
+
+
 const LoginStack = createStackNavigator({
+  
   Login: {
-    screen: Login,
+    screen: AsyncStorage.getItem('isLoggedIn') == false ? Login : Validate,
     headerMode: 'none',
     header: null,
   },
@@ -131,9 +174,12 @@ const LoginStack = createStackNavigator({
   },
 });
 
+
+
 const AppNavigator = createDrawerNavigator(
-  {Home: HomeStack, About: AboutStack, Login: LoginStack},
+  {Home: HomeStack, About: AboutStack, Login: LoginStack, Random:RandomStack},
   DrawerNavigatorConfig,
 );
 
 export default AppNavigator;
+

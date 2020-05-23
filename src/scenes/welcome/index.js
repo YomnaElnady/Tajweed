@@ -16,7 +16,7 @@ class Welcome extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.navigation.navigate('Home');
-    }, 2000);
+    }, 10);
   }
 
   render() {
