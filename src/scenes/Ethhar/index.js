@@ -1,66 +1,17 @@
 import React, {Component} from 'react';
-import PlayerScreen from 'react-native-sound-playerview';
-import {StackNavigator} from 'react-navigation';
-import AudioRecord from 'react-native-audio-record';
-
-import {
-  View,
-  Text,
-  FlatList,
-  Button,
-  Alert,
-  ImageBackground,
-  TouchableOpacity,
-  PermissionsAndroid,
-  Image
-} from 'react-native';
+import {View, Text, FlatList, Button,TouchableOpacity, ImageBackground,AsyncStorage, Alert, Image,ScrollView} from 'react-native';
 import {Card} from 'react-native-elements';
 import SwipeablePanel from 'rn-swipeable-panel';
-//import PlayerScreen from 'react-native-sound-playerview';
+import PlayerScreen from 'react-native-sound-playerview';
+import { SafeAreaView } from 'react-navigation';
+//import { ScrollView,  } from 'react-native-gesture-handler';
+import axios from 'axios';
+import AudioRecord from 'react-native-audio-record';
+import { Buffer } from 'buffer';
+//import { ScrollView } from 'react-native-gesture-handler';
 
-//var audio =''
 
-async function requestMicrophonePermission() {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      {
-        title: "Requesting Microphone Access",
-        message: "App needs permission to access to your microphone "
-      }
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("You can use the microphone");
-    } else {
-      console.log("Microphone permission denied");
-      alert("Microphone permission denied");
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-}
-async function requestWritePermission() {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title: "Requesting Microphone Access",
-        message: "App needs permission to access to your microphone "
-      }
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("You can use the external writing");
-    } else {
-      console.log("Microphone permission denied");
-      alert("Microphone permission denied");
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-}
 
-requestMicrophonePermission();
-requestWritePermission();
 
 const options = {
   sampleRate: 16000,  // default 44100
@@ -68,105 +19,59 @@ const options = {
   bitsPerSample: 16,  // 8 or 16, default 16
   audioSource: 6,     // android only (see below)
   wavFile: 'test.wav' // default 'audio.wav'
+
 };
 
 AudioRecord.init(options);
 
 
-
-
-class Ethhar extends Component {
-  constructor(props) {
-    super(props);
-    this.stopRecord = this.stopRecord.bind(this)
-   // this.startRecord = this.startRecord.bind(this)
-
-
+class Ekhfaa extends Component {
+  constructor() {
+    super();
     this.state = {
-      swipeablePanelActive: false,
-      audio:'test.wav',
-      isLoading: true,
-      dataSource:[], 
-      FlatListItems: [
-        {key: '﴿مَنْ أَعْرَضَ﴾ ', 
-        hokm: 'النون الساكنة مع الهمزة',
-        voice: "elmasad_1.mp3",
-        hasRecord:false,
-        working:false
-      
-        },
-        {
-          key: '﴿جَنَّاتٍ أَلْفَافاً﴾ ',
-          hokm: '  التنوين مع الهمزة',
-        },
-        {
-          key: '﴿مِـنْهُمْ﴾',
-          hokm: 'النون الساكنة مع الهاء',
-        },
-        {
-          key: '﴿قَوْمٍ هَادٍ﴾',
-          hokm: ' التنوين مع الهاء',
-        },
-        {
-          key: '﴿مِنْ عَاصِمٍ﴾',
-          hokm: '  النون الساكنة مع العين',
-        },
-        {
-          key: '﴿شَيْءٍ عَلِيمٌ﴾',
-          hokm: ' التنوين مع العين',
-        },
-        {
-          key: '﴿يَنْحِتُونَ﴾',
-          hokm: ' النون الساكنة مع الحاء',
-        },
-        {
-          key: '﴿عَزِيزٌ حَكِيمٌ﴾',
-          hokm: 'التنوين مع الحاء',
-        },
-        {
-          key: '﴿مِنْ غِسْلِينٍ﴾',
-          hokm: '  النون الساكنة مع الغين',
-        },
-        {
-          key: '﴿عَفُوّاً غَفُوراً﴾',
-          hokm: 'التنوين مع الغين',
-        },
-        {
-          key: '﴿مِنْ خَشْيَةِ﴾',
-          hokm: 'النون الساكنة مع الخاء',
-        },
-        {
-          key: '﴿ذَرَّةٍ خَيْراً﴾ ',
-          hokm: '   التنوين مع الخاء',
-        },
-      ],
+
+      isLoading:true,
+      hasRecord:false,
+      working:false,
+      showText:false,
+      dataSource:[],
+      FlatListItems: [],
+      description:'',
+      mainRule:'',
+      versesToShow:[],
+      verseIdToSend:'',
+      shName:'',
+      data:{},
+      responeZero:{}, 
+      networkError:false
+
     };
   }
-  GetItem(item) {
-    this.props.navigation.navigate('Methal');
-  }
-  openPanel = () => {
-    this.setState({swipeablePanelActive: true});
-  };
 
-  closePanel = () => {
-    this.setState({swipeablePanelActive: false});
-  };
-  
+
+
   startRecord =()=>{
+    console.log('تسجيل')
     this.setState({hasRecord:false});  
     AudioRecord.start()
     console.log(this.state.hasRecord)  
     this.setState({working: !this.state.working});
-     
-
+   
+    // AudioRecord.on('data', data => {
+    //   // base64-encoded audio data chunks
+    //   const chunk = Buffer.from(data, 'base64');
+    //   this.setState({chunk: chunk}) 
+    //  // console.log(data)
+    // });
+   
+    
   } 
   
   
   
   
 
- async stopRecord(){  
+  stopRecord=async()=>{  
    const hasRecord=true
    this.setState({hasRecord: true});
    this.setState({working: !this.state.working});
@@ -174,209 +79,493 @@ class Ethhar extends Component {
     console.log(audioFile)
     this.setState({audio: audioFile});
     console.log('انتهيت') 
-   console.log(this.state.hasRecord)   
+   console.log(this.state.hasRecord)
   }
 
 
-   componentDidMount() {
-    try {
-    fetch('https://otrojjah-api.herokuapp.com/api/verse')
+
+  sendRecord=async()=>{
+    this.setState({hasRecord: false})
+  
+  
+  
+    const jwt = AsyncStorage.getItem('jwt')
+    const audiofile='file://'+this.state.audio
+    //const blobUrl = RNFetchBlob.wrap(RNFetchBlob.fs.asset('file://'+this.state.audio));
+   console.log('audiofile')
+    console.log(audiofile)
+   
+    
+  //  let blobUrl =await result.blob()
+  
+  //const blob =fromUint8Array(this.state.chunk)
+  
+  console.log(this.state.chunk)
+  const view =await new Uint8Array([1,2,5,3,4,5])
+  const blob= await new Blob([this.state.chunk],{type:'audio/wav'})
+  console.log(blob.data)
+  //const blobUrl = URL.createObjectURL(blob);
+  //const recordURI = Asset.fromModule(require("./assets/01B1.wav")).uri;
+  
+  console.log(this.state.verseName)
+    var data = new FormData();
+    data.append("label",  this.state.versesToShow);
+    data.append("verseId",  this.state.verseIdToSend);
+    data.append("record",  {
+      uri: audiofile,
+      name: "01B1.wav",
+      type: "audio/wav"
+    });
+    data.append("isShaikh", false);
+    console.log('data')
+    console.log(data)
+  
+     // RNFetchBlob.fetch('POST', 'https://otrojjah-api.herokuapp.com/api/record',
+     // {  'Content-Type' : 'multipart/form-data'},
+     // [{name:'record',filename:'', label: "فَمَنْ يَعْمَلْ",  data:data, isShaikh:false}])
+  
+   
+  
+  
+    await axios
+      .post('https://otrojjah-api.herokuapp.com/api/record',data, {headers: { "x-auth-token": jwt,  'Content-Type': 'multipart/form-data', }})
+    .then(function(response) {
+      console.log('then')
+      console.log(response.data);
+      console.log(response)
+    }).catch(error=> 
+      {
+        if(error=='Network request failed'){
+          this.setState({
+            networkError:true
+          })
+        }
+        console.log(error.response.data)})
+  }
+
+
+
+
+
+  componentDidMount= async()=> {
+   // this.fetchHokm('5e7b449b64a37600171db103');
+    //this.fetchHokm('5e7b449b64a37600171db104');
+    //this.fetchHokm('5e7b449b64a37600171db105');
+  //  this.fetchHokm('5e7b449b64a37600171db106');
+
+  await  fetch('https://otrojjah-api.herokuapp.com/api/rule?parentId=5e7b450d64a37600171db106')
      .then((response)=> response.json())
-     .then((responseJson)=>{
+  //   .then((response)=> console.log(response))
+     .then((response)=>{
        this.setState({
          isLoading:false,
-         FlatListItems: responseJson
+         dataSource: response,
+         
+         
        })
-     })
-    } catch (error) {
-      console.error(error);
-    }
+       console.log('this is the first fetch')
+
+       console.log(this.state.dataSource)
+       console.log(response)
+     }).then(console.log(this.state.dataSource))
+     .then(responseJson => {
+      responseJson = responseJson.map(item => {
+        item.isSelect = false;
+        item.fileUrl='';
+        
+      //  item.selectedClass = styles.list;
+        return item;
+      })})
+     .catch (error =>{
+      if(error=='Network request failed'){
+        this.setState({
+          networkError:true
+        })
+      } 
+      console.log(error)})
+
+
+     await  fetch('https://otrojjah-api.herokuapp.com/api/rule?id=5e7b450d64a37600171db106')
+     .then((response)=> response.json())
+  //   .then((response)=> console.log(response))
+     .then((response)=>{
+       this.setState({
+         isLoading:false,
+         description: response[0].description,
+         mainRule: response[0]._id
+         
+       })
+       console.log('this is the seconed fetch')
+       console.log(this.state.FlatListItems)
+       console.log(response)
+     }).then(console.log(this.state.dataSource))
+     .catch (error =>{
+      if(error=='Network request failed'){
+        this.setState({
+          networkError:true
+        })
+      } 
+      console.log(error)})
+   
+     
+    //Record
+    
+
+
   }
 
-  FlatListItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 5,
-          width: '100%',
-          backgroundColor: '#129D9B',
-        }}
-      />
-    );
-  };
 
- 
-  render() {
-    
-    let {dataSource, isLoading}= this.state
-    
-    viewButtons= ()=>{
-      return(
-        <View style={{flexDirection:'row', justifyContent:'space-around'}}> 
-        <Button
-        title="ارسل التسجيل"
-        color="#00C788"
-        onPress={() => this.setState({hasRecord: false})}
-        />
-      
-      <Button
-        title="امسح التسجيل"
-        color="#00C788"
-        onPress={() => Alert.alert('Button with adjusted color pressed')}
-        /> 
-        </View> 
-        ); 
-         };
-       
-          return (
-            <ImageBackground
-              source={require('_assets/images/islamic.jpg')}
-              style={{
-                width: '100%',
-                height: '100%',
-                opacity: 100,
-                
-              }}>
-             
-              <View style={{justifyContent: 'center', flex: 1, margin: 10}}>
-                <Button
-                  title="انظر شرح الحكم"
-                  color="#1ABC9C"
-                  onPress={() => this.openPanel()}
-                />
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <SwipeablePanel
-                    fullWidth
-                    isActive={this.state.swipeablePanelActive}
-                    onClose={this.closePanel}
-                    onPressCloseButton={this.closePanel}>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        fontFamily: 'Cochin',
-                        margin: 15,
-                      }}>
-                      الإظهار
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        fontFamily: 'Cochin',
-                        margin: 15,
-                      }}>
-                      لغة: البيان
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        fontFamily: 'Cochin',
-                        margin: 15,
-                      }}>
-                      اصطلاحا: إخراج كل حرف من مخرجه من غير زيادة في غنة الحرف
-                      المُظهَر. وعلى هذا يجب فصل النون الساكنة أو التنوين عن الحرف
-                      الذي بعدها من غير سكت عليه.
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        fontFamily: 'Cochin',
-                        margin: 15,
-                      }}>
-                      حروفه: تظهر النون الساكنة أو التنوين إذا وقع بعدها حرف من حروف
-                      الحلق الستة: الهمزة والهاء والعين والحاء والغين والخاء (ء هـ ع ح
-                      غ خ) وهذه الحروف مجموعة في أوائل هذه الكلمات: أخي هاك علما حازه
-                      غير خاسر.
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        fontFamily: 'Cochin',
-                        margin: 15,
-                      }}>
-                      ويكون إظهار النون الساكنة في الكلمة الواحدة وفي الكلمتين. أما
-                      إظهار التنوين فلا يقع حتما إلا في كلمتين.
-                    </Text>
-                  </SwipeablePanel>
-                </View>
-                <FlatList
-                  data={this.state.FlatListItems}
-                  extraData={this.state}
-                 // renderItem={this._renderItem} 
-                  keyExtractor={(item,index) => index.toString()}   
-                  renderItem={({item}) => (
-                    
-                     <View style={{flex: 1, flexDirection: 'row-reverse'}}>
-                       <View
-                         style={{
-                           flex: 1,
-                           flexDirection: 'column',
-                           backgroundColor: '',
-                         borderRadius: 10,
-                       }}>
-                    
-      
-                         <Card title={item.name}>
-                           <Text style={{marginBottom: 10}}>{item.key}</Text>
-                           <PlayerScreen filepath= 'elmasad_1.mp3' />
-                          
-                   <View  style={{flex:1 }}>
-                { this.state.hasRecord && <PlayerScreen filepath='/data/user/0/com.tajweed/files/test.wav'/> }
-         
-               { !this.state.working &&     <TouchableOpacity 
-                     onPress={this.startRecord} 
-                     style={{justifyContent:'center', alignItems:'center'}}
-                     >
-                   
-                   <Image  style={{width:150, height:150, }}
-                   source={require('_assets/images/rec.png')}/>
-                     
-           </TouchableOpacity> 
-                  }
-          {/* stop */}
+  getVerse = async (recordId, data) =>{
 
-           { this.state.working &&
-           <TouchableOpacity 
-                     onPress={this.stopRecord} 
-                     style={{justifyContent:'center', alignItems:'center'}}
-                     >
-                   
-                   <Image  style={{width:65, height:65, }}
-                   source={require('_assets/images/stop.png')}/>
-                     
-           </TouchableOpacity>
-                  }
+    await  fetch(`https://otrojjah-api.herokuapp.com/api/verse?ruleId=${recordId}`)
+    .then((response)=> response.json())
+ //   .then((response)=> console.log(response))
+    .then((response)=>{
+
+      this.setState({
+        versesToShow:response[0].name,
+       verseIdToSend:response[0]._id,
+       responeZero:response[0],
+       data:data
+      })
+      console.log('this is the seconed fetch')
+      this.checkRecords(data)
+      console.log(response)
       
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-         
-              </View>    
-      
-              {this.state.hasRecord && viewButtons()  }
-             
-            
-             
-           </View>
-                       
-                        
-                       </Card>
-                      </View>
-                     </View>
-                    )}
-                />
-           
-           
-              </View>
-            </ImageBackground>
-          );}
-         
+    })
+    .catch (error => {
+      if(error=='Network request failed'){
+        this.setState({
+          networkError:true
+        })
+      }
+      console.log(error)})
+  }
 
 
-          
-  
+chooseSH=async(item)=>{
+  this.setState({
+    shName:item
+  })
+  this.getRecord(this.state.responeZero,this.state.data)
 }
 
-export default Ethhar;
+
+checkRecords=async(data)=>{
+  await  fetch(`https://otrojjah-api.herokuapp.com/api/record?verseId=${this.state.responeZero._id}`)
+  .then((response)=> response.json())
+  .then(responseJson=>{
+    if(responseJson.length==0){
+      data.fileURL = 'none';
+      const index = this.state.dataSource.findIndex(
+        item => data._id === item._id
+      );
+   
+      this.state.dataSource[index] = data;
+   
+      this.setState({
+        dataSource: this.state.dataSource,
+      });
+    }
+  }).catch(error=>{console.log(error)})
+}
+
+getRecord = async (recordId,data) =>{
+ 
+  await  fetch(`https://otrojjah-api.herokuapp.com/api/record?verseId=${recordId._id}`)
+  .then((response)=> response.json())
+//   .then((response)=> console.log(response))
+  .then( responseJson => {
+    
+     if(responseJson.length==0){
+       data.fileURL = 'none';
+       const index = this.state.dataSource.findIndex(
+         item => data._id === item._id
+       );
+    
+       this.state.dataSource[index] = data;
+    
+       this.setState({
+         dataSource: this.state.dataSource,
+       });
+     }
+     else{
+      var sheikh =responseJson
+      var shName = this.state.shName
+      var filteredArray = sheikh.filter(function(itm){
+        return shName.indexOf(itm.label) > -1;
+      });
+      filteredArray =  filteredArray ;
+      console.log('filtered', filteredArray)
+     if (filteredArray[0].label==shName){
+      data.fileURL = filteredArray[0].fileURL;
+
+     }else{
+     data.fileURL = filteredArray[1].fileURL;
+     }
+     const index = this.state.dataSource.findIndex(
+       item => data._id === item._id
+     );
+  
+     this.state.dataSource[index] = data;
+  
+     this.setState({
+       dataSource: this.state.dataSource,
+     });
+   }
+
+
+   
+
+     
+
+    console.log('this is the third fetch',filteredArray)
+   
+    console.log(responseJson.length)
+    })
+  .catch (error => {
+    if(error=='Network request failed'){
+      this.setState({
+        networkError:true
+      })
+    }
+    console.log(error)})
+
+}
+
+
+
+  selectItem = data => {
+    console.log(data.parentId)
+    
+//to close other tabs when opening a new tab
+    var newData = this.state.dataSource.map((item) => {
+      return {...item, isSelect: false}
+      })
+      this.state.dataSource = newData
+this.setState({
+  dataSource:  this.state.dataSource,
+  versesToShow:[],
+  verseIdToSend:'',
+  shName:''
+})
+
+//////
+
+   this.getVerse(data._id, data)
+    data.isSelect = !data.isSelect;
+   
+  
+    const index = this.state.dataSource.findIndex(
+      item => data.name === item.name
+    );
+  
+    this.state.dataSource[index] = data;
+  
+    this.setState({
+      dataSource: this.state.dataSource,
+    });
+  };
+
+  addingNewKey= async(dataSource)=>{
+    var result = await dataSource.map(function(o) {
+      o.opened = false;
+      return o;
+    })
+    
+   await this.setState({
+     dataSource:result
+      
+    })
+  }
+
+
+
+
+  openPanel = () => {
+    this.setState({swipeablePanelActive: true});
+  };
+
+  closePanel = () => {
+    this.setState({swipeablePanelActive: false});
+  };
+  render() {
+
+    viewButtons= ()=>{
+      return(
+        <View style={{flexDirection:'row', justifyContent:'space-around', marginVertical:10}}> 
+        <TouchableOpacity  onPress={this.sendRecord}>
+        <Text style={{color:'white', textAlign:'center', backgroundColor:'#c28f48',borderRadius: 50, width:150, fontSize:20 ,alignSelf:'flex-start'}}>إرسل التسجيل</Text>
+
+        </TouchableOpacity>
+      
+        <TouchableOpacity onPress={() => this.setState({hasRecord: false})}>
+        <Text style={{color:'white', textAlign:'center', backgroundColor:'#c28f48',borderRadius: 50, width:150, fontSize:20 ,alignSelf:'flex-start'}}>إمسح التسجيل</Text>
+        </TouchableOpacity>
+     
+        </View> 
+        ); 
+         }
+
+
+
+    return (
+      <ImageBackground
+        source={require('_assets/images/islamic.jpg')}
+        style={{
+          width: '100%',
+          height: '100%',
+          opacity: 100,
+        }}>
+       
+             
+          <View >
+         
+              
+          <View >
+                    {/* <ScrollView>
+                    <Text>{this.state.description}</Text>               
+                    </ScrollView>  */}
+                  
+                 <View style={{  width: '100%', height: '100%',}}>   
+                   <TouchableOpacity onPress={()=>this.setState({showText:!this.state.showText})}>
+                     <Text style={{textAlign:'center', backgroundColor:'#c28f48', fontSize:20, margin:10, color:'white',fontFamily: 'a-jannat-lt',borderRadius:30}}>شرح حكم الإظهار</Text>
+                   </TouchableOpacity>  
+                    
+                 
+                 {this.state.showText &&
+                  <View style={{ margin:10,borderRadius:25,backgroundColor:'#243c49'}}>
+                    <TouchableOpacity onPress={()=>this.setState({showText:!this.state.showText})}>
+                 <Text style={{textAlign:'left', fontSize:20,margin:10,color:'#faeed7'}}>x</Text>
+                 </TouchableOpacity>
+               <ScrollView>
+              <Text style={{margin:10, color:'#faeed7'}}>{this.state.description}</Text>
+              <Text>...</Text>
+              <Text>...</Text>
+              <Text>...</Text>
+              <Text>...</Text>
+              </ScrollView> 
+                  </View>
+                 }
+            <FlatList
+              extraData={this.state}
+              data={this.state.dataSource}
+              renderItem={({item}) => (
+                <View style={{flex: 1, }}>
+
+                <View>
+
+
+                  <View
+                    style={{
+                      flex: 1,
+                     // flexDirection: 'column',
+                      backgroundColor: '#faeed7',
+                      borderWidth:1,
+                      borderColor:'black',
+                      borderRadius: 30,
+                      margin:10,
+                      
+                    }}>
+
+                    
+                       <TouchableOpacity    onPress={() => this.selectItem(item)}>
+                      <Text style={{marginBottom: 10,fontSize:18, textAlign:'center', fontFamily: 'a-jannat-lt',}}>{item.name}</Text>
+                      </TouchableOpacity>  
+                 {item.isSelect &&     <View style={{flex: 0.25}}>
+               
+                      
+                          <TouchableOpacity >
+                           <Text style={{textAlign:'center',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>{this.state.versesToShow}</Text>  
+                          </TouchableOpacity>
+                   {item.isSelect && this.state.shName ==''&& item.fileURL!='none'&&
+                   <View style={{alignItems:'center'}}>
+                <Text style={{textAlign:'center',fontFamily: 'a-jannat-lt', fontSize:20}}>اختر صوت الشيخ</Text>  
+
+                   <TouchableOpacity onPress={()=>this.chooseSH('عبد الباسط مجود')}>
+                    <Text style={{textAlign:'center',marginVertical:3, color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>عبد الباسط مجود</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity  onPress={()=>this.chooseSH('مشارى')}>
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>مشارى</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity  onPress={()=>this.chooseSH('الحصري')}>
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>الحصري</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity onPress={()=>this.chooseSH('عبد الباسط')} >
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>عبد الباسط</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity  onPress={()=>this.chooseSH('المنشاوى')}>
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>المنشاوى</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity  onPress={()=>this.chooseSH('محمود البنا')}>
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>محمود البنا</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity  onPress={()=>this.chooseSH(' المنشاوى مجود')}>
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>المنشاوي مجود</Text>  
+                   </TouchableOpacity>
+                   <TouchableOpacity  onPress={()=>this.chooseSH('الحصري مجود')}>
+                    <Text style={{textAlign:'center',marginVertical:3,color:'white', width:150, borderRadius:50,backgroundColor:'#011325',fontFamily: 'Al-QuranAlKareem', fontSize:20}}>الحصري مجود</Text>  
+                   </TouchableOpacity>
+                   </View>
+                   }
+
+                     
+
+                      {item.isSelect &&item.fileURL &&item.fileURL!='none' &&<PlayerScreen filepath={item.fileURL} />}
+                      {item.isSelect && item.fileURL=='none'  && <Text style={{fontFamily: 'a-jannat-lt', alignSelf:'center', color:'red'}}>لا يوجد تسجيلات لهذا بعد</Text>}
+
+                      { !this.state.working && item.fileURL&& item.fileURL!='none' &&
+                              <TouchableOpacity 
+                            onPress={this.startRecord} 
+                            style={{justifyContent:'center', alignItems:'center'}}
+                            >
+                          
+                          <Image  style={{width:75, height:75, }}
+                          source={require('_assets/images/rec.png')}/>
+                            
+                          </TouchableOpacity>  
+                      }
+                       { this.state.working && item.fileURL&& item.fileURL!='none' &&
+                          <TouchableOpacity 
+                                    onPress={this.stopRecord} 
+                                    style={{justifyContent:'center', alignItems:'center'}}
+                                    >
+                                  
+                                  <Image  
+                                  source={require('_assets/images/stop.png')}/>
+                                    
+                          </TouchableOpacity>
+                        }
+                       { this.state.hasRecord && <PlayerScreen filepath='/data/user/0/com.tajweed/files/test.wav'/> }
+                       {this.state.hasRecord && viewButtons()  }
+
+                      </View>
+             
+             
+             
+             
+             }
+                
+                  </View>
+                    {/* overlay */}
+                
+                  </View> 
+                               
+       
+                </View>
+              )}
+            />
+
+             
+
+                </View>  
+  
+                
+          </View>
+        </View>
+      </ImageBackground>
+    );
+  }
+}
+
+export default Ekhfaa;

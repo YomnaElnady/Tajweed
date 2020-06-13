@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TextInput, View, Button, ImageBackground, AsyncStorage, Alert} from 'react-native';
+import {TextInput, View, TouchableOpacity, ImageBackground, AsyncStorage, Alert, Text} from 'react-native';
 import axios from 'axios';
 import { string } from 'prop-types';
 
@@ -47,11 +47,19 @@ class LoginScreen extends Component {
      
        console.log(response.data)
        const jwt = await AsyncStorage.setItem('token',response.data)
-       const value=  await AsyncStorage.setItem('isLoggedIn', '1')
+      // const value=  await AsyncStorage.setItem('isLoggedIn', '1')
        const value2 = await AsyncStorage.getItem('isLoggedIn')
-       Alert.alert(value2)
-    }).then( this.props.navigation.navigate('Audio'))
- 
+    }).then(async()=>{
+        this.setState({
+          email:'',
+          password:''
+        })
+        jwt = await AsyncStorage.getItem('token')
+      if (jwt!=''){
+       //isLoggedIn='1' 
+       this.props.navigation.navigate('Audio')
+      }
+      })
     .catch(function(error) {
 
       if (error.response.data == 'Invalid email or password.'){
@@ -65,32 +73,47 @@ class LoginScreen extends Component {
 
     return (
       <ImageBackground
-        source={require('_assets/images/islamic.jpg')}
+        source={require('_assets/images/login.jpg')}
         style={{
           width: '100%',
           height: '100%',
         }}>
+        <View style={{flex:1}}>
+        </View>
         <View
           style={{
-            //flex: 1,
+            flex: 1,
             justifyContent: 'center',
           }}>
+         <Text style={{color:'#011325', textAlign:'center',fontFamily:'a-jannat-lt' ,backgroundColor:'#faeed7',borderRadius: 50, width:100, alignSelf:'center'}}>اسم المستخدم</Text>
+    
           <TextInput
             style={{
-              marginTop: 20,
               height: 40,
               borderColor: 'gray',
               borderWidth: 1,
               backgroundColor: '#FFFFFF',
-              marginBottom: 20,
+              marginBottom:10,
               borderRadius: 50,
+               width:250,
+              alignSelf:'center'
             }}
             on
-            placeholder="البريد الالكتروني"
+            placeholder=" "
             onChangeText={email => this.setState({email})}
             value={this.state.email}
             autoCapitalize="none"
           />
+          <Text
+           style={{color:'#011325',
+            textAlign:'center',
+            backgroundColor:'#faeed7',
+            borderRadius: 50,
+             width:100, 
+             alignSelf:'center',
+             fontFamily:'a-jannat-lt' 
+             }}>
+             كلمةالمرور</Text>
 
           <TextInput
             onChangeText={password => this.setState({password})}
@@ -100,11 +123,13 @@ class LoginScreen extends Component {
               borderColor: 'gray',
               borderWidth: 1,
               backgroundColor: '#FFFFFF',
-              marginBottom: 20,
+              marginBottom: 10,
               borderRadius: 50,
+              width:250,
+              alignSelf:'center'
             }}
             
-            placeholder="كلمة المرور"
+            placeholder=""
             secureTextEntry={true}
             value={this.state.password}
             direction ='rtl'
@@ -112,11 +137,12 @@ class LoginScreen extends Component {
           <View
             style={{
               marginBottom: 20,
-              marginTop: 10,
               marginLeft: 10,
               marginRight: 10,
             }}>
-            <Button onPress={onConfirm} title="سجّل" color="#1ABC9C" />
+            <TouchableOpacity onPress={onConfirm}>
+            <Text style={{color:'white', textAlign:'center',fontFamily:'a-jannat-lt' , backgroundColor:'#c28f48',borderRadius: 50, width:100, alignSelf:'center'}}>تسجيل الدخول</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>

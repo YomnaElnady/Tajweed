@@ -27,6 +27,7 @@ import Ekhfaa from '_scenes/Ekhfaa';
 import EkhfaaShafawy from '_scenes/EkhfaaShafawy';
 import EthharShafawy from '_scenes/EthharShafawy';
 import EdghamShafawy from '_scenes/EdghamShafawy';
+import Almad from '_scenes/Almad';
 import Random from '_scenes/random';
 
 
@@ -37,6 +38,8 @@ class NavigationDrawerStructure extends Component {
     super(props);
     //this.toggleDrawer=this.toggleDrawer.bind(this);
   }
+
+   
   //Structure for the navigatin Drawer
   toggleDrawer = () => {
     //Props to open/close the drawer
@@ -47,6 +50,7 @@ class NavigationDrawerStructure extends Component {
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           onPress={() => {
+
             this.props.navigation.toggleDrawer();
           }}>
           <Image
@@ -58,11 +62,30 @@ class NavigationDrawerStructure extends Component {
     );
   }
 }
-
 const DrawerNavigatorConfig = {
-  initialRouteName: 'Home',
+  
+  initialRouteName: 'الرئيسية',
   header: null,
   headerMode: 'none',
+  drawerBackgroundColor:'#faeed7',
+  contentOptions: {
+    activeTintColor: 'primary',
+    activeBackgroundColor: 'transparent',
+    inactiveTintColor: 'black',
+    inactiveBackgroundColor: 'transparent',
+    
+    labelStyle: {
+      fontFamily: 'a-jannat-lt',
+      fontSize: 15,
+      marginLeft: 10,
+      color: '#234c49',
+      fontWeight: 'normal',
+       
+            
+
+      
+    },
+  },
 };
 
 const HomeStack = createStackNavigator({
@@ -79,45 +102,107 @@ const HomeStack = createStackNavigator({
       title: '',
       headerLeft: <NavigationDrawerStructure navigation={navigation} />,
       headerStyle: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#faeed7',
       },
-      headerTintColor: '#ffffff',
+      headerTintColor: '#faeed7',
     }),
   },
-  Ethhar: {
+  Ethhar: { 
     screen: Ethhar,
     headerMode: 'none',
     header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
   },
   Edgham: {
     screen: Edgham,
     headerMode: 'none',
     header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
   },
   Eqlab: {
     screen: Eqlab,
     headerMode: 'none',
     header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
   },
   Ekhfaa: {
     screen: Ekhfaa,
     headerMode: 'none',
     header: null,
+  navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
+    
   },
   EkhfaaShafawy: {
     screen: EkhfaaShafawy,
     headerMode: 'none',
     header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
   },
   EthharShafawy: {
     screen: EthharShafawy,
     headerMode: 'none',
     header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
   },
   EdghamShafawy: {
     screen: EdghamShafawy,
     headerMode: 'none',
     header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
+  },
+  Almad: {
+    screen: Almad,
+    headerMode: 'none',
+    header: null,
+    navigationOptions: ({navigation}) => ({
+      title: '',
+      headerStyle: {
+        backgroundColor: '#faeed7',
+      },
+      headerTintColor: 'black',
+    })
   },
 });
 
@@ -131,6 +216,7 @@ const AboutStack = createStackNavigator({
         backgroundColor: 'none',
       },
       headerTintColor: '#ffffff',
+      
     }),
   },
 });
@@ -139,46 +225,52 @@ const AboutStack = createStackNavigator({
 const RandomStack = createStackNavigator({
   Random: {
     screen: Random,
-    navigationOptions: ({navigation}) => ({
-      title: '',
-      headerLeft: <NavigationDrawerStructure navigation={navigation} />,
-      headerStyle: {
-        backgroundColor: 'none',
-      },
-      headerTintColor: '#ffffff',
-    }),
+    navigationOptions: { header:null,headerVisible: false}
+
   },
 });
 
-
+var isLoggedIn;
 loadData =async()=>{
-  const isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
+   isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
   if (isLoggedIn == '1'){
-    return true;
-  }else return false;
+     btngan='1';
+  }else btngan='null';
 }
 
 
+loadData();
 
-
-
-const LoginStack = createStackNavigator({
+const LoginStack = createStackNavigator(
+  
+  {
   
   Login: {
-    screen: AsyncStorage.getItem('isLoggedIn') == false ? Login : Validate,
+    screen: isLoggedIn  == '1' ? Validate : Login,
     headerMode: 'none',
-    header: null,
+    navigationOptions: { header:null,headerVisible: false}
+     
+    
   },
   Audio: {
     screen: Validate,
+    navigationOptions: { header:null,headerVisible: false}
+
   },
 });
+
+
+
+
 
 
 
 const AppNavigator = createDrawerNavigator(
-  {Home: HomeStack, About: AboutStack, Login: LoginStack, Random:RandomStack},
+  {الرئيسية: HomeStack,  "من نحن": AboutStack, للشيخ: LoginStack, عشوائي:RandomStack},
+ 
   DrawerNavigatorConfig,
+
+
 );
 
 export default AppNavigator;

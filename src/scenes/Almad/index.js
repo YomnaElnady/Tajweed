@@ -153,7 +153,7 @@ class Ekhfaa extends Component {
     //this.fetchHokm('5e7b449b64a37600171db105');
   //  this.fetchHokm('5e7b449b64a37600171db106');
 
-  await  fetch('https://otrojjah-api.herokuapp.com/api/rule?parentId=5e7b44e064a37600171db105')
+  await  fetch('https://otrojjah-api.herokuapp.com/api/rule?parentId=5e8256e9331ad5001725d64e')
      .then((response)=> response.json())
   //   .then((response)=> console.log(response))
      .then((response)=>{
@@ -185,7 +185,7 @@ class Ekhfaa extends Component {
       console.log(error)})
 
 
-     await  fetch('https://otrojjah-api.herokuapp.com/api/rule?id=5e7b44e064a37600171db105')
+     await  fetch('https://otrojjah-api.herokuapp.com/api/rule?id=5e8256e9331ad5001725d64e')
      .then((response)=> response.json())
   //   .then((response)=> console.log(response))
      .then((response)=>{
@@ -252,9 +252,10 @@ chooseSH=async(item)=>{
 
 
 checkRecords=async(data)=>{
-  await  fetch(`https://otrojjah-api.herokuapp.com/api/record?verseId=${this.state.responeZero._id}`)
+  await  fetch(`https://otrojjah-api.herokuapp.com/api/record?verseId=${this.state.responeZero.ruleId}`)
   .then((response)=> response.json())
   .then(responseJson=>{
+     console.log('check Records',responseJson,this.state.responeZero.ruleId) 
     if(responseJson.length==0){
       data.fileURL = 'none';
       const index = this.state.dataSource.findIndex(
@@ -429,7 +430,7 @@ this.setState({
                   
                  <View style={{  width: '100%', height: '100%',}}>   
                    <TouchableOpacity onPress={()=>this.setState({showText:!this.state.showText})}>
-                     <Text style={{textAlign:'center', backgroundColor:'#c28f48', fontSize:20, margin:10, color:'white',fontFamily: 'a-jannat-lt',borderRadius:30}}>شرح حكم الإقلاب</Text>
+                     <Text style={{textAlign:'center', backgroundColor:'#c28f48', fontSize:20, margin:10, color:'white',fontFamily: 'a-jannat-lt',borderRadius:30}}>شرح حكم المد الجائز</Text>
                    </TouchableOpacity>  
                     
                  
